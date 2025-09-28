@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr" data-page="accueil">
+<html lang="fr" data-page="actualites">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Accueil • Site Noir</title>
+  <title>Actualités • Site Noir</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css" />
@@ -28,33 +28,25 @@
   <button class="banner-btn" aria-haspopup="dialog" aria-controls="banner-dialog">Choisir la bannière</button>
 </header>
 
-<section class="hero">
+<section class="hero compact">
   <div class="hero-content">
-    <h1>Bienvenue sur votre site noir ✨</h1>
-    <p>Un design élégant, rapide et accessible — avec bannière personnalisable.</p>
-    <div class="hero-actions">
-      <a class="btn" href="actualites.html">Voir les actualités</a>
-      <a class="btn ghost" href="boutique.html">Explorer la boutique</a>
-    </div>
+    <h1>Actualités</h1>
+    <p>Les dernières informations et annonces.</p>
   </div>
 </section>
-
 <main class="container">
-  <section class="home-grid">
-    <article class="card">
-      <h3>Actualités</h3>
-      <p>Publiez vos dernières nouvelles avec un style sobre. Les cartes s'adaptent à toutes les tailles d'écran.</p>
-      <a class="btn small" href="actualites.html">Lire</a>
+  <section class="news-list">
+    <article class="news-item">
+      <time datetime="2025-09-01">1 septembre 2025</time>
+      <h3>Lancement de notre nouvelle collection</h3>
+      <p>Nous présentons une gamme minimaliste pensée pour le confort et la durabilité.</p>
+      <a class="btn tiny" href="#">En savoir plus</a>
     </article>
-    <article class="card">
-      <h3>Boutique</h3>
-      <p>Mettez en avant vos produits dans une grille responsive, avec badges et CTA.</p>
-      <a class="btn small" href="boutique.html">Découvrir</a>
-    </article>
-    <article class="card">
-      <h3>Recrutement</h3>
-      <p>Un formulaire accessible pour recevoir des candidatures sans prise de tête.</p>
-      <a class="btn small" href="recrutement.html">Postuler</a>
+    <article class="news-item">
+      <time datetime="2025-07-20">20 juillet 2025</time>
+      <h3>Ouverture d'une boutique éphémère</h3>
+      <p>Retrouvez-nous au centre-ville pour un week-end d'offres exclusives.</p>
+      <a class="btn tiny" href="#">Détails</a>
     </article>
   </section>
 </main>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr" data-page="accueil">
+<html lang="fr" data-page="recrutement">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Accueil • Site Noir</title>
+  <title>Recrutement • Site Noir</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css" />
@@ -28,35 +28,43 @@
   <button class="banner-btn" aria-haspopup="dialog" aria-controls="banner-dialog">Choisir la bannière</button>
 </header>
 
-<section class="hero">
+<section class="hero compact">
   <div class="hero-content">
-    <h1>Bienvenue sur votre site noir ✨</h1>
-    <p>Un design élégant, rapide et accessible — avec bannière personnalisable.</p>
-    <div class="hero-actions">
-      <a class="btn" href="actualites.html">Voir les actualités</a>
-      <a class="btn ghost" href="boutique.html">Explorer la boutique</a>
-    </div>
+    <h1>Recrutement</h1>
+    <p>Envoyez-nous votre candidature. Réponse sous 7 jours ouvrés.</p>
   </div>
 </section>
-
 <main class="container">
-  <section class="home-grid">
-    <article class="card">
-      <h3>Actualités</h3>
-      <p>Publiez vos dernières nouvelles avec un style sobre. Les cartes s'adaptent à toutes les tailles d'écran.</p>
-      <a class="btn small" href="actualites.html">Lire</a>
-    </article>
-    <article class="card">
-      <h3>Boutique</h3>
-      <p>Mettez en avant vos produits dans une grille responsive, avec badges et CTA.</p>
-      <a class="btn small" href="boutique.html">Découvrir</a>
-    </article>
-    <article class="card">
-      <h3>Recrutement</h3>
-      <p>Un formulaire accessible pour recevoir des candidatures sans prise de tête.</p>
-      <a class="btn small" href="recrutement.html">Postuler</a>
-    </article>
-  </section>
+  <form class="form" action="#" method="post" novalidate>
+    <div class="field">
+      <label for="name">Nom complet</label>
+      <input id="name" name="name" type="text" placeholder="Ex. Jeanne Dupont" required />
+      <small class="error">Veuillez renseigner votre nom.</small>
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" placeholder="vous@exemple.com" required />
+      <small class="error">Adresse email invalide.</small>
+    </div>
+    <div class="field">
+      <label for="role">Poste visé</label>
+      <select id="role" name="role" required>
+        <option value="">Sélectionnez…</option>
+        <option>Designer</option>
+        <option>Développeur·se</option>
+        <option>Chef·fe de projet</option>
+      </select>
+      <small class="error">Choisissez un poste.</small>
+    </div>
+    <div class="field">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="6" placeholder="Votre motivation…"></textarea>
+    </div>
+    <div class="actions">
+      <button class="btn" type="submit">Envoyer</button>
+      <button class="btn ghost" type="reset">Réinitialiser</button>
+    </div>
+  </form>
 </main>
 <footer class="site-footer">
   <p>© <span id="year"></span> Site Noir — Tous droits réservés.</p>
