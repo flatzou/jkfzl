@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/Utilisateur/Downloads/code-vault_1.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Vault</title>
+<link href="./Code Vault_files/css2" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0E0F11;
+  --surface:#16181C;
+  --surface2:#1E2128;
+  --surface3:#252830;
+  --border:#2C2F38;
+  --border2:#383C48;
+  --text:#E8EAF0;
+  --text-muted:#6B7080;
+  --text-dim:#454A58;
+  --accent:#4FFFB0;
+  --accent-dim:#1A3D2E;
+  --accent-text:#0A1F17;
+  --blue:#60A5FA;
+  --blue-dim:#1A2840;
+  --red:#F87171;
+  --red-dim:#2A1515;
+  --amber:#FBC15E;
+  --amber-dim:#2A1F0A;
+  --radius:10px;
+  --radius-sm:6px;
+}
+
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+
+/* TOPBAR */
+.topbar{
+  display:flex;align-items:center;gap:1rem;padding:0.85rem 1.5rem;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.logo{
+  font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;
+  color:var(--accent);letter-spacing:-0.02em;white-space:nowrap;
+}
+.logo span{color:var(--text-muted)}
+.topbar-search{
+  flex:1;max-width:340px;position:relative;
+}
+.topbar-search input{
+  width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:0.45rem 0.75rem 0.45rem 2rem;font-family:'Outfit',sans-serif;font-size:0.82rem;
+  color:var(--text);outline:none;transition:border-color 0.15s;
+}
+.topbar-search input::placeholder{color:var(--text-dim)}
+.topbar-search input:focus{border-color:var(--accent)}
+.topbar-search .si{position:absolute;left:0.6rem;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:0.85rem}
+.topbar-actions{margin-left:auto;display:flex;gap:0.5rem}
+
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:0.45rem 1rem;border-radius:var(--radius-sm);font-family:'Outfit',sans-serif;
+  font-size:0.82rem;font-weight:500;cursor:pointer;border:none;transition:all 0.15s;white-space:nowrap;
+}
+.btn-accent{background:var(--accent);color:var(--accent-text)}
+.btn-accent:hover{filter:brightness(1.1)}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+
+/* LAYOUT */
+.layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 53px)}
+
+/* SIDEBAR */
+.sidebar{
+  width:240px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.sidebar-header{
+  padding:0.9rem 1rem 0.6rem;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-title{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);font-weight:500}
+.btn-icon{
+  background:none;border:none;cursor:pointer;color:var(--text-dim);
+  width:26px;height:26px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:all 0.12s;
+}
+.btn-icon:hover{background:var(--surface2);color:var(--accent)}
+.project-list{flex:1;overflow-y:auto;padding:0.5rem}
+.project-list::-webkit-scrollbar{width:4px}
+.project-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+.project-item{
+  display:flex;align-items:center;gap:8px;padding:0.5rem 0.6rem;border-radius:var(--radius-sm);
+  cursor:pointer;transition:all 0.12s;margin-bottom:2px;
+  font-size:0.84rem;color:var(--text-muted);
+}
+.project-item:hover{background:var(--surface2);color:var(--text)}
+.project-item.active{background:var(--accent-dim);color:var(--accent)}
+.project-item .pi{font-size:0.9rem;flex-shrink:0}
+.project-item .pname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.project-item .pcount{
+  font-family:'JetBrains Mono',monospace;font-size:0.65rem;
+  background:var(--surface3);color:var(--text-dim);padding:1px 5px;border-radius:3px;flex-shrink:0;
+}
+.project-item.active .pcount{background:var(--accent-dim);color:var(--accent)}
+
+.sidebar-footer{padding:0.75rem 1rem;border-top:1px solid var(--border)}
+.storage-bar{height:3px;background:var(--surface3);border-radius:2px;margin-top:0.4rem}
+.storage-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.3s}
+.storage-label{font-size:0.68rem;color:var(--text-dim);display:flex;justify-content:space-between}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+.main-header{
+  padding:1rem 1.5rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:1rem;flex-shrink:0;
+}
+.project-title{font-size:1.1rem;font-weight:600;color:var(--text)}
+.project-lang-badge{
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:2px 8px;
+  border-radius:3px;font-weight:500;
+}
+.main-actions{margin-left:auto;display:flex;gap:0.5rem}
+
+.files-area{flex:1;overflow-y:auto;padding:1.25rem 1.5rem}
+.files-area::-webkit-scrollbar{width:5px}
+.files-area::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* DROP ZONE */
+.dropzone{
+  border:2px dashed var(--border2);border-radius:var(--radius);
+  padding:2.5rem;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:1.25rem;
+}
+.dropzone:hover,.dropzone.dragover{border-color:var(--accent);background:var(--accent-dim)}
+.dropzone .dz-icon{font-size:2rem;margin-bottom:0.5rem}
+.dropzone p{font-size:0.82rem;color:var(--text-muted)}
+.dropzone p strong{color:var(--accent)}
+.dropzone input{display:none}
+
+/* FILES GRID */
+.files-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem}
+.file-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1rem;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;
+}
+.file-card:hover{border-color:var(--border2);background:var(--surface2)}
+.file-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--file-color,var(--border));opacity:0.8;
+}
+.file-icon{font-size:1.5rem;margin-bottom:0.6rem}
+.file-name{
+  font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:500;
+  color:var(--text);word-break:break-all;margin-bottom:0.4rem;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.file-meta{font-size:0.68rem;color:var(--text-dim)}
+.file-actions{
+  display:flex;gap:4px;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border);
+}
+.fbn{
+  flex:1;padding:0.3rem;border:none;border-radius:4px;font-size:0.72rem;font-family:'Outfit',sans-serif;
+  cursor:pointer;transition:all 0.12s;background:var(--surface3);color:var(--text-muted);
+}
+.fbn:hover{background:var(--border2);color:var(--text)}
+.fbn.del:hover{background:var(--red-dim);color:var(--red)}
+
+/* EMPTY PROJECT */
+.empty-project{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--text-dim);gap:0.5rem;padding:3rem;text-align:center;
+}
+.empty-project .big{font-size:3rem}
+.empty-project p{font-size:0.85rem;color:var(--text-muted);max-width:260px;line-height:1.5}
+
+/* WELCOME */
+.welcome{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1rem;padding:2rem;text-align:center;
+}
+.welcome h2{font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--text)}
+.welcome p{font-size:0.85rem;color:var(--text-muted);max-width:300px;line-height:1.6}
+
+/* MODAL */
+.overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  z-index:200;align-items:center;justify-content:center;padding:1rem;
+}
+.overlay.open{display:flex}
+.modal{
+  background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);
+  padding:1.5rem;width:100%;max-width:420px;position:relative;
+}
+.modal h3{font-size:1rem;font-weight:600;margin-bottom:1.2rem;color:var(--text)}
+.fg{margin-bottom:0.9rem}
+.fg label{display:block;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:0.3rem}
+.fg input,.fg select{
+  width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:0.5rem 0.75rem;font-family:'Outfit',sans-serif;font-size:0.85rem;color:var(--text);outline:none;
+  transition:border-color 0.15s;
+}
+.fg input:focus,.fg select:focus{border-color:var(--accent)}
+.fg select option{background:var(--surface2)}
+.modal-btns{display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1.2rem}
+.close-x{position:absolute;top:0.85rem;right:0.85rem;background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:1rem}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:1.5rem;right:1.5rem;background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text);padding:0.65rem 1rem;border-radius:var(--radius-sm);font-size:0.82rem;
+  z-index:300;opacity:0;transform:translateY(6px);transition:all 0.2s;pointer-events:none;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.toast.show{opacity:1;transform:none}
+.toast.ok .ti{color:var(--accent)}
+.toast.err .ti{color:var(--red)}
+
+@media(max-width:640px){
+  .sidebar{width:200px}
+  .files-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">code<span>/</span>vault</div>
+  <div class="topbar-search">
+    <span class="si">⌕</span>
+    <input type="text" id="searchInput" placeholder="Rechercher un fichier…" oninput="filterFiles()">
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-ghost" onclick="openProjectModal()">+ Projet</button>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Projets</span>
+      <button class="btn-icon" title="Nouveau projet" onclick="openProjectModal()">+</button>
+    </div>
+    <div class="project-list" id="projectList"><div class="project-item " onclick="selectProject(&#39;p1773337858959&#39;)">
+      <span class="pi" style="color:#F7DF1E">◆</span>
+      <span class="pname">xxx</span>
+      <span class="pcount">0</span>
+    </div></div>
+    <div class="sidebar-footer">
+      <div class="storage-label"><span>Stockage local</span><span id="storageUsed">0 Ko</span></div>
+      <div class="storage-bar"><div class="storage-fill" id="storageFill" style="width: 3.81e-05%; background: var(--accent);"></div></div>
+    </div>
+  </aside>
+
+  <div class="main" id="mainArea"><div class="welcome"><div style="font-size:3rem">🗂️</div><h2>Code Vault</h2><p>Sélectionnez un projet ou créez-en un nouveau.</p><button class="btn btn-accent" onclick="openProjectModal()">Créer un projet</button></div></div>
+</div>
+
+<!-- Modal nouveau projet -->
+<div class="overlay" id="projOverlay">
+  <div class="modal">
+    <button class="close-x" onclick="closeProjModal()">✕</button>
+    <h3 id="projModalTitle">Nouveau projet</h3>
+    <input type="hidden" id="projEditId">
+    <div class="fg">
+      <label>Nom du projet</label>
+      <input type="text" id="projName" placeholder="Ex: MonBot Discord">
+    </div>
+    <div class="fg">
+      <label>Langage principal</label>
+      <select id="projLang">
+        <option value="">— Choisir —</option>
+        <option value="JS">JavaScript</option>
+        <option value="TS">TypeScript</option>
+        <option value="PY">Python</option>
+        <option value="RS">Rust</option>
+        <option value="GO">Go</option>
+        <option value="PHP">PHP</option>
+        <option value="CSS">CSS</option>
+        <option value="HTML">HTML</option>
+        <option value="C#">C#</option>
+        <option value="C++">C++</option>
+        <option value="Java">Java</option>
+        <option value="...">Autre</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeProjModal()">Annuler</button>
+      <button class="btn btn-accent" onclick="saveProject()">Créer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="ti" id="toastIcon">✓</span><span id="toastMsg"></span></div>
+
+<script>
+const LANG_COLORS={JS:'#F7DF1E',TS:'#3178C6',PY:'#3572A5',RS:'#CE4A00',GO:'#00ADD8',PHP:'#777BB4',CSS:'#563D7C',HTML:'#E44D26','C#':'#178600','C++':'#F34B7D',Java:'#B07219','...':'#6B7080'};
+const LANG_BG={JS:'#2A2600',TS:'#0D1E3A',PY:'#0D1A2A',RS:'#2A1200',GO:'#002A30',PHP:'#1A1630',CSS:'#1A1026',HTML:'#2A1200','C#':'#081A04','C++':'#2A0F1A',Java:'#1E1200','...':'#1A1A1A'};
+const EXT_ICON={'js':'📜','ts':'📘','py':'🐍','rs':'⚙️','go':'🐹','php':'🐘','css':'🎨','html':'🌐','json':'📋','md':'📝','txt':'📄','zip':'📦','sql':'🗃️','sh':'🖥️','env':'🔑','vue':'💚','jsx':'⚛️','tsx':'⚛️','cpp':'⚙️','cs':'💜','java':'☕'};
+
+let projects=[];
+let files={};
+let activeProject=null;
+
+function load(){
+  try{
+    projects=JSON.parse(localStorage.getItem('cv_projects')||'[]');
+    files=JSON.parse(localStorage.getItem('cv_files')||'{}');
+  }catch(e){projects=[];files={};}
+}
+function save(){
+  try{
+    localStorage.setItem('cv_projects',JSON.stringify(projects));
+    localStorage.setItem('cv_files',JSON.stringify(files));
+  }catch(e){toast('Stockage plein ! Supprimez des fichiers.','err');}
+  updateStorage();
+}
+
+function updateStorage(){
+  try{
+    const used=new Blob([localStorage.getItem('cv_files')||'']).size;
+    const kb=(used/1024).toFixed(0);
+    const pct=Math.min(100,(used/(5*1024*1024))*100);
+    document.getElementById('storageUsed').textContent=kb>1024?(used/1048576).toFixed(1)+' Mo':kb+' Ko';
+    document.getElementById('storageFill').style.width=pct+'%';
+    document.getElementById('storageFill').style.background=pct>80?'var(--red)':pct>60?'var(--amber)':'var(--accent)';
+  }catch(e){}
+}
+
+function fileCount(pid){return (files[pid]||[]).length}
+
+function renderSidebar(){
+  const list=document.getElementById('projectList');
+  if(projects.length===0){list.innerHTML='<div style="padding:1rem;font-size:0.75rem;color:var(--text-dim);text-align:center">Aucun projet.<br>Créez-en un !</div>';return;}
+  list.innerHTML=projects.map(p=>{
+    const c=LANG_COLORS[p.lang]||'var(--text-dim)';
+    const active=activeProject===p.id?'active':'';
+    return `<div class="project-item ${active}" onclick="selectProject('${p.id}')">
+      <span class="pi" style="color:${c}">◆</span>
+      <span class="pname">${p.name}</span>
+      <span class="pcount">${fileCount(p.id)}</span>
+    </div>`;
+  }).join('');
+}
+
+function selectProject(pid){
+  activeProject=pid;
+  renderSidebar();
+  renderMain();
+}
+
+function renderMain(){
+  const main=document.getElementById('mainArea');
+  if(!activeProject){main.innerHTML=`<div class="welcome"><div style="font-size:3rem">🗂️</div><h2>Code Vault</h2><p>Sélectionnez un projet ou créez-en un nouveau.</p><button class="btn btn-accent" onclick="openProjectModal()">Créer un projet</button></div>`;return;}
+  const p=projects.find(x=>x.id===activeProject);
+  if(!p){activeProject=null;renderMain();return;}
+  const c=LANG_COLORS[p.lang]||'var(--text-dim)';
+  const bg=LANG_BG[p.lang]||'var(--surface3)';
+  const langBadge=p.lang?`<span class="project-lang-badge" style="background:${bg};color:${c}">${p.lang}</span>`:'';
+  main.innerHTML=`
+    <div class="main-header">
+      <span style="font-size:1.2rem;color:${c}">◆</span>
+      <span class="project-title">${p.name}</span>
+      ${langBadge}
+      <div class="main-actions">
+        <button class="btn btn-ghost" onclick="editProject('${p.id}')">✏️ Renommer</button>
+        <button class="btn btn-ghost" style="color:var(--red)" onclick="deleteProject('${p.id}')">🗑</button>
+      </div>
+    </div>
+    <div class="files-area" id="filesArea">
+      <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()" ondragover="doDragOver(event)" ondragleave="doDragLeave(event)" ondrop="doDrop(event)">
+        <input type="file" id="fileInput" multiple onchange="handleFiles(this.files)">
+        <div class="dz-icon">📂</div>
+        <p><strong>Cliquer pour ajouter</strong> ou glisser-déposer</p>
+        <p style="margin-top:4px;font-size:0.72rem">Tous types de fichiers acceptés</p>
+      </div>
+      <div class="files-grid" id="filesGrid"></div>
+    </div>`;
+  renderFiles();
+}
+
+function getIcon(fname){
+  const ext=(fname.split('.').pop()||'').toLowerCase();
+  return EXT_ICON[ext]||'📄';
+}
+
+function getFileColor(fname){
+  const ext=(fname.split('.').pop()||'').toLowerCase();
+  const map={js:'#F7DF1E',ts:'#3178C6',py:'#3572A5',rs:'#CE4A00',go:'#00ADD8',php:'#777BB4',css:'#563D7C',html:'#E44D26',json:'#8BC34A',md:'#9C27B0',zip:'#FF9800',sql:'#FF5722',sh:'#4CAF50',vue:'#42B883',jsx:'#61DAFB',tsx:'#3178C6'};
+  return map[ext]||'var(--border2)';
+}
+
+function formatSize(b){if(b<1024)return b+'o';if(b<1048576)return(b/1024).toFixed(0)+'Ko';return(b/1048576).toFixed(1)+'Mo';}
+function formatDate(ts){return new Date(ts).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}
+
+function renderFiles(q=''){
+  const grid=document.getElementById('filesGrid');
+  if(!grid||!activeProject)return;
+  let flist=(files[activeProject]||[]);
+  if(q)flist=flist.filter(f=>f.name.toLowerCase().includes(q.toLowerCase()));
+  if(flist.length===0){
+    grid.innerHTML=`<div style="grid-column:1/-1;color:var(--text-dim);font-size:0.82rem;padding:1rem 0">${q?'Aucun fichier trouvé.':'Aucun fichier. Ajoutez vos sauvegardes !'}</div>`;
+    return;
+  }
+  grid.innerHTML=flist.map((f,i)=>`
+    <div class="file-card" style="--file-color:${getFileColor(f.name)}">
+      <div class="file-icon">${getIcon(f.name)}</div>
+      <div class="file-name">${f.name}</div>
+      <div class="file-meta">${formatSize(f.size)} · ${formatDate(f.date)}</div>
+      <div class="file-actions">
+        <button class="fbn" onclick="downloadFile(${i})">⬇ Télécharger</button>
+        <button class="fbn del" onclick="deleteFile(${i})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function filterFiles(){
+  const q=document.getElementById('searchInput').value;
+  renderFiles(q);
+}
+
+function doDragOver(e){e.preventDefault();document.getElementById('dropzone').classList.add('dragover')}
+function doDragLeave(){document.getElementById('dropzone').classList.remove('dragover')}
+function doDrop(e){e.preventDefault();doDragLeave();handleFiles(e.dataTransfer.files)}
+
+function handleFiles(filelist){
+  if(!activeProject||!filelist.length)return;
+  let count=0;
+  Array.from(filelist).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      if(!files[activeProject])files[activeProject]=[];
+      files[activeProject].unshift({name:file.name,size:file.size,date:Date.now(),data:e.target.result});
+      count++;
+      if(count===filelist.length){save();renderSidebar();renderFiles();toast(`${count} fichier${count>1?'s':''} ajouté${count>1?'s':''}`);}
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function downloadFile(i){
+  const f=(files[activeProject]||[])[i];
+  if(!f)return;
+  const a=document.createElement('a');
+  a.href=f.data;a.download=f.name;a.click();
+  toast('Téléchargement lancé');
+}
+
+function deleteFile(i){
+  if(!confirm('Supprimer ce fichier ?'))return;
+  files[activeProject].splice(i,1);
+  save();renderSidebar();renderFiles();toast('Fichier supprimé','err');
+}
+
+// Project modal
+function openProjectModal(){
+  document.getElementById('projModalTitle').textContent='Nouveau projet';
+  document.getElementById('projEditId').value='';
+  document.getElementById('projName').value='';
+  document.getElementById('projLang').value='';
+  document.querySelector('#projOverlay .btn-accent').textContent='Créer';
+  document.getElementById('projOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('projName').focus(),100);
+}
+function closeProjModal(){document.getElementById('projOverlay').classList.remove('open')}
+
+function editProject(pid){
+  const p=projects.find(x=>x.id===pid);
+  if(!p)return;
+  document.getElementById('projModalTitle').textContent='Renommer le projet';
+  document.getElementById('projEditId').value=pid;
+  document.getElementById('projName').value=p.name;
+  document.getElementById('projLang').value=p.lang||'';
+  document.querySelector('#projOverlay .btn-accent').textContent='Enregistrer';
+  document.getElementById('projOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('projName').focus(),100);
+}
+
+function saveProject(){
+  const name=document.getElementById('projName').value.trim();
+  if(!name){toast('Nom requis','err');return;}
+  const lang=document.getElementById('projLang').value;
+  const editId=document.getElementById('projEditId').value;
+  if(editId){
+    const p=projects.find(x=>x.id===editId);
+    if(p){p.name=name;p.lang=lang;}
+    toast('Projet mis à jour');
+  }else{
+    const id='p'+Date.now();
+    projects.unshift({id,name,lang,created:Date.now()});
+    activeProject=id;
+    toast('Projet créé');
+  }
+  save();closeProjModal();renderSidebar();renderMain();
+}
+
+function deleteProject(pid){
+  if(!confirm('Supprimer ce projet et tous ses fichiers ?'))return;
+  projects=projects.filter(p=>p.id!==pid);
+  delete files[pid];
+  if(activeProject===pid)activeProject=null;
+  save();renderSidebar();renderMain();toast('Projet supprimé','err');
+}
+
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  document.getElementById('toastIcon').textContent=type==='ok'?'✓':'✕';
+  t.className='toast '+type+' show';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+document.getElementById('projOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('projOverlay'))closeProjModal()});
+document.getElementById('projName').addEventListener('keydown',e=>{if(e.key==='Enter')saveProject()});
+
+load();renderSidebar();renderMain();updateStorage();
+</script>
+
+
+</body></html>
